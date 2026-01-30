@@ -5,7 +5,7 @@ from pytrends.request import TrendReq
 from datetime import datetime, timedelta
 import config
 from utils import log
-
+import os
 # ================= 配置区域 =================
 # 1. 设置锚点关键词（用于归一化不同选手的热度）
 ANCHOR_KEYWORD = "Dancing with the Stars"
@@ -59,7 +59,6 @@ SEASON_DATES = {
 
 def get_google_trends_data():
     # 初始化 pytrends
-    # hl='en-US' 确保语言环境，tz=360 是时区偏移
     pytrends = TrendReq(hl='en-US', tz=360, timeout=(10,25))
     
     try:
@@ -68,16 +67,45 @@ def get_google_trends_data():
         print(f"错误: 找不到文件 {input_file}")
         return
 
+    # ================= 核心修改 1: 读取已有进度 =================
     results = []
-    
+    scraped_set = set() # 用于存放 (season, name) 的指纹，用于快速查找
+
+    if os.path.exists(output_file):
+        try:
+            print(f"检测到已有文件 {output_file}，正在读取进度...")
+            existing_df = pd.read_csv(output_file)
+            
+            # 将已有的数据加载到 results 列表，防止覆盖旧数据
+            results = existing_df.to_dict('records')
+            
+            # 创建去重指纹集合
+            # 注意：这里确保 season 是整数类型，和后面遍历时保持一致
+            scraped_set = set(zip(existing_df['season'], existing_df['celebrity_name']))
+            print(f"已成功加载 {len(scraped_set)} 条历史数据，将跳过这些选手。")
+        except Exception as e:
+            print(f"读取历史文件出错: {e}，将重新开始爬取。")
+            results = []
+            scraped_set = set()
+    else:
+        print("未检测到历史文件，将开始全新爬取。")
+    # ==========================================================
+
     # 去重：同一个选手在一个赛季只搜一次
     unique_entries = df[['season', 'celebrity_name']].drop_duplicates()
     
-    print(f"开始爬取 {len(unique_entries)} 名选手的数据...")
+    print(f"总任务量: {len(unique_entries)} 名选手...")
     
     for index, row in unique_entries.iterrows():
         season = row['season']
         name = row['celebrity_name']
+        
+        # ================= 核心修改 2: 跳过已存在的 =================
+        if (season, name) in scraped_set:
+            # 可以在这里打印日志，也可以为了清屏选择不打印
+            # print(f"跳过已存在: {name} (S{season})") 
+            continue
+        # ==========================================================
         
         # 检查是否有该赛季的日期数据
         if season not in SEASON_DATES:
@@ -87,11 +115,12 @@ def get_google_trends_data():
         start_date, end_date = SEASON_DATES[season]
         timeframe = f"{start_date} {end_date}"
         
-        # 构建关键词列表：[选手名, 锚点名]
-        # 注意：有些名字可能有特殊字符，建议简单清洗
+        # 构建关键词列表
         clean_name = name.replace("'", "") 
         kw_list = [clean_name, ANCHOR_KEYWORD]
         
+        print(f"正在爬取 [{index}/{len(unique_entries)}]: {name} (S{season})...")
+
         try:
             # 发送请求
             pytrends.build_payload(kw_list, cat=0, timeframe=timeframe, geo='US', gprop='')
@@ -99,50 +128,60 @@ def get_google_trends_data():
             # 获取随时间变化的热度
             interest_over_time = pytrends.interest_over_time()
             
-            if not interest_over_time.empty:
-                # === 核心逻辑：计算相对热度 ===
-                # 取该时间段内的平均值
-                mean_scores = interest_over_time.mean()
-                celeb_score = mean_scores[clean_name]
-                anchor_score = mean_scores[ANCHOR_KEYWORD]
-                
-                # 计算比率：相对于节目的热度
-                # 如果 anchor_score 为 0 (极少见), 则直接用 celeb_score
-                if anchor_score > 0:
-                    relative_ratio = celeb_score / anchor_score
-                else:
-                    relative_ratio = celeb_score # 降级处理
-                
-                print(f"[{index}/{len(unique_entries)}] {name} (S{season}): Ratio = {relative_ratio:.4f}")
-                
-                results.append({
-                    'season': season,
-                    'celebrity_name': name,
-                    'google_trend_raw': celeb_score,
-                    'anchor_score': anchor_score,
-                    'popularity_ratio': relative_ratio # <--- 这是你要进模型的参数
-                })
-            else:
-                print(f"[{index}] {name}: 无数据返回")
-                results.append({'season': season, 'celebrity_name': name, 'popularity_ratio': 0})
+            current_result = {}
 
-            # === 关键：随机延时防止封IP ===
-            # 建议设置在 5-10 秒之间，跑完几百个数据需要一小时，但安全
+            if not interest_over_time.empty:
+                # === 计算相对热度 ===
+                mean_scores = interest_over_time.mean()
+                
+                # 安全获取数据，防止有些时候返回的列名不一致
+                if clean_name in mean_scores and ANCHOR_KEYWORD in mean_scores:
+                    celeb_score = mean_scores[clean_name]
+                    anchor_score = mean_scores[ANCHOR_KEYWORD]
+                    
+                    if anchor_score > 0:
+                        relative_ratio = celeb_score / anchor_score
+                    else:
+                        relative_ratio = celeb_score 
+                    
+                    print(f"  -> 成功: Ratio = {relative_ratio:.4f}")
+                    
+                    current_result = {
+                        'season': season,
+                        'celebrity_name': name,
+                        'google_trend_raw': celeb_score,
+                        'anchor_score': anchor_score,
+                        'popularity_ratio': relative_ratio
+                    }
+                else:
+                    print(f"  -> 数据异常: 返回数据中缺少列")
+                    current_result = {'season': season, 'celebrity_name': name, 'popularity_ratio': 0}
+
+            else:
+                print(f"  -> 无数据返回 (可能由于搜索量过低)")
+                current_result = {'season': season, 'celebrity_name': name, 'popularity_ratio': 0}
+
+            # 添加到总结果中
+            results.append(current_result)
+
+            # ================= 核心修改 3: 实时保存 =================
+            # 每爬取成功一个，就保存一次文件。
+            # 这样即使程序崩溃，也只损失当前这一条，不用重头再来。
+            pd.DataFrame(results).to_csv(output_file, index=False)
+            # ======================================================
+
+            # 随机延时
             sleep_time = random.uniform(5, 10)
             time.sleep(sleep_time)
 
         except Exception as e:
             print(f"Error crawling {name}: {e}")
-            # 如果遇到 429 Too Many Requests，休息更久
             if "429" in str(e):
-                print("触发限流，暂停 60 秒...")
+                print("触发限流 (429)，暂停 60 秒...")
                 time.sleep(60)
             continue
 
-    # 保存结果
-    result_df = pd.DataFrame(results)
-    result_df.to_csv(output_file, index=False)
-    print(f"完成！数据已保存至 {output_file}")
+    print(f"全部完成！最终数据已保存至 {output_file}")
 
 if __name__ == "__main__":
     get_google_trends_data()
