@@ -23,7 +23,6 @@ def stat_clean(filename):
     df = pd.read_csv(filename)
     df['weeks_survived'] = df['results']
 
-
 def weekly_stat_process():
     """本函数用于生成周维度下的数据"""
         # 1. 加载原始数据
@@ -215,8 +214,51 @@ def process_select(str):
     elif str == "unique":
         stat_unique()
 
+def popularity_merge():
+    popularity_file = config.DATA_PROCESSED / "popularity_prior_results.csv"
+    week_file = config.DATA_PROCESSED / "processed_weekly_data.csv"
+    season_file = config.DATA_PROCESSED / "processed_seasonal_data.csv"
+    df_popu = pd.read_csv(popularity_file)
+    df_week = pd.read_csv(week_file)
+    df_season = pd.read_csv(season_file)
+    # 获取非零的最小值（第二小的值）
+    non_zero_ratios = df_popu['popularity_ratio'][df_popu['popularity_ratio'] > 0]
+    second_min_ratio = np.min(non_zero_ratios) if len(non_zero_ratios) > 0 else 0.001
+    
+    # 将popularity_ratio为0的值替换为第二小的值
+    df_popu['popularity_ratio'] = df_popu['popularity_ratio'].replace(0.0, second_min_ratio)
+    
+    
+    # 1. 合并到周数据
+    # 选择需要的列：celebrity_name, season, popularity_ratio
+    df_popu_merge = df_popu[['celebrity_name', 'season', 'popularity_ratio']]
+    
+    # 使用左连接将popularity_ratio合并到周数据
+    df_week_merged = df_week.merge(df_popu_merge, 
+                                   on=['celebrity_name', 'season'], 
+                                   how='left')
+    
+    # 2. 合并到赛季数据
+    df_season_merged = df_season.merge(df_popu_merge, 
+                                       on=['celebrity_name', 'season'], 
+                                       how='left')
+    
+    # 3. 保存合并后的数据
+    df_week_merged.to_csv(config.DATA_PROCESSED / "weekly_data_with_popularity.csv", index=False)
+    df_season_merged.to_csv(config.DATA_PROCESSED / "seasonal_data_with_popularity.csv", index=False)
+    
+    print("数据合并完成！")
+    print(f"周数据合并后形状: {df_week_merged.shape}")
+    print(f"赛季数据合并后形状: {df_season_merged.shape}")
+    print(f"周数据中popularity_ratio缺失值数量: {df_week_merged['popularity_ratio'].isna().sum()}")
+    print(f"赛季数据中popularity_ratio缺失值数量: {df_season_merged['popularity_ratio'].isna().sum()}")
+    
+    return df_week_merged, df_season_merged
+
 if __name__=="__main__":
     # weekly_stat_process()
     # stat_unique(RAW_file,"results")
     # seasonal_process()
-    process_select("week")
+    # process_select("week")
+    # stat_unique(RAW_file,"ballroom_partner")
+    popularity_merge()
