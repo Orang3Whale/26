@@ -241,10 +241,6 @@ def load_info():
     
     return info_map
 
-def dirichlet():
-    """
-    该函数为迪利克雷分布
-    """
 
 def dirichlet_alpha(season, contestants, judge_scores_dict, info_map, week):
     """

@@ -1,0 +1,336 @@
+season,week,actual_elim,rank_pred,pct_pred,match_rank,match_pct,bias_metric_rank,bias_metric_pct
+1,1,,Evander Holyfield,Evander Holyfield,False,False,0.7664233574628376,3.0085485480912144
+1,2,Trista Sutter,Trista Sutter,Trista Sutter,True,True,0.9999999996571428,2.507333670657156
+1,3,Evander Holyfield,Evander Holyfield,Evander Holyfield,True,True,0.9999999995,2.4602825935126043
+1,4,Rachel Hunter,Rachel Hunter,Rachel Hunter,True,True,0.9999999991999999,4.695145112379957
+1,5,,Joey McIntyre,Joey McIntyre,False,False,0.9999999985000001,12.741276813021544
+1,6,,John O'Hurley,John O'Hurley,False,False,0.9999999959999999,915.7991965905313
+2,1,Kenny Mayne,Kenny Mayne,Kenny Mayne,True,True,0.933257918446464,1.0108709123477129
+2,2,Tatum O'Neal,Tatum O'Neal,Tatum O'Neal,True,True,1.0188679243725882,1.315237308464239
+2,3,Giselle Fernandez,Giselle Fernandez,Giselle Fernandez,True,True,0.9230769229146238,1.471500724523552
+2,4,Master P,Master P,Master P,True,True,0.9074074072015604,0.7194807591271508
+2,5,Tia Carrere,Tia Carrere,Tia Carrere,True,True,0.9999999996571428,3.076259610708927
+2,6,George Hamilton,George Hamilton,George Hamilton,True,True,1.0869565211483931,3.0215625293644757
+2,7,Lisa Rinna,Lisa Rinna,Lisa Rinna,True,True,0.7407407403017833,2.627789590921501
+2,8,,Jerry Rice,Jerry Rice,False,False,0.9999999985000001,8.477322907602339
+3,1,Tucker Carlson,Tucker Carlson,Tucker Carlson,True,True,0.95727848092102,0.9116099050770476
+3,2,Shanna Moakler,Shanna Moakler,Shanna Moakler,True,True,1.16361071915887,3.096633342374921
+3,3,Harry Hamlin,Emmitt Smith,Harry Hamlin,False,True,1.007462686414917,4.1082029805058236
+3,4,Vivica A. Fox,Vivica A. Fox,Vivica A. Fox,True,True,1.0803858518677019,3.8299578455566103
+3,5,Willa Ford,Jerry Springer,Willa Ford,False,True,0.7368421051274238,19.80371983659246
+3,6,,Jerry Springer,Jerry Springer,False,False,0.9999999995,0.5548827485561793
+3,7,Jerry Springer,Jerry Springer,Jerry Springer,True,True,0.7812499996948242,7.158546973577834
+3,8,Monique Coleman,Monique Coleman,Monique Coleman,True,True,1.0526315780609417,78.03850613008615
+3,9,,Emmitt Smith,Emmitt Smith,False,False,666666666.6666666,203312.366514201
+3,10,,Emmitt Smith,Emmitt Smith,False,False,249999999.99999997,698539.3221057535
+4,1,,Billy Ray Cyrus,Billy Ray Cyrus,False,False,0.9512578615447311,0.2357752832139687
+4,2,Paulina Porizkova,Shandi Finnessey,Paulina Porizkova,False,True,1.1393596985519185,2.819997287865162
+4,3,Shandi Finnessey,John Ratzenberger,Shandi Finnessey,False,True,0.7753759397767505,3.195262571094974
+4,4,Leeza Gibbons,Leeza Gibbons,Leeza Gibbons,True,True,1.1203319500191975,0.9187531356845918
+4,5,Clyde Drexler,Clyde Drexler,Clyde Drexler,True,True,0.9999999998095238,0.6341362681767552
+4,6,Heather Mills,Heather Mills,Heather Mills,True,True,0.8521739128619281,2.411865546616415
+4,7,John Ratzenberger,John Ratzenberger,John Ratzenberger,True,True,0.83999999975808,2.0689172062551355
+4,8,Billy Ray Cyrus,Billy Ray Cyrus,Billy Ray Cyrus,True,True,0.9999999995,1.91547925149782
+4,9,Ian Ziering,Ian Ziering,Ian Ziering,True,True,0.7407407403017833,277.84325793491996
+4,10,,Joey Fatone,Laila Ali,False,False,0.9999999985000001,0.08339798765582668
+5,1,Josie Maran,Josie Maran,Josie Maran,True,True,1.0293941210868427,1.711251189231241
+5,2,Albert Reed,Albert Reed,Albert Reed,True,True,1.2099999998535902,1.8730625428305319
+5,3,Wayne Newton,Wayne Newton,Wayne Newton,True,True,0.7864632983044363,1.8405500649198256
+5,4,Floyd Mayweather Jr. ,Floyd Mayweather Jr. ,Floyd Mayweather Jr. ,True,True,0.9374999998681641,5.057553312284324
+5,5,Mark Cuban,Mark Cuban,Mark Cuban,True,True,1.1199999997610666,2.75695690843444
+5,6,Sabrina Bryan,Sabrina Bryan,Sabrina Bryan,True,True,1.0425531912176322,4.393922995870174
+5,7,Jane Seymour,Jane Seymour,Jane Seymour,True,True,1.0096153842659024,76.10714627144985
+5,8,Cameron Mathison,Cameron Mathison,Cameron Mathison,True,True,0.9999999995,14.201876898548704
+5,9,Jennie Garth,Jennie Garth,Jennie Garth,True,True,0.7407407403017833,71.67068053013976
+5,10,,Helio Castroneves,Marie Osmond,False,False,0.9999999985000001,0.052621582900021883
+6,1,,Penn Jillette,Monica Seles,False,False,1.0293941210868431,10.704861966312867
+6,2,Monica Seles,Monica Seles,Monica Seles,True,True,0.9151999999297126,10.419759341011398
+6,3,Steve Guttenberg,Steve Guttenberg,Steve Guttenberg,True,True,1.4006791169099015,27.903161373789008
+6,4,Adam Carolla,Adam Carolla,Adam Carolla,True,True,0.9963099629507359,20.455488182612413
+6,5,Priscilla Presley,Priscilla Presley,Priscilla Presley,True,True,0.965517241201744,31.880173101204186
+6,6,Marlee Matlin,Marlee Matlin,Marlee Matlin,True,True,1.1264367812919804,33.17808145932296
+6,7,Shannon Elizabeth,Shannon Elizabeth,Shannon Elizabeth,True,True,1.1413043473794895,118.52309370235206
+6,8,Mario,Mario,Mario,True,True,0.9999999995,6.769641955770839
+6,9,Marissa Jaret Winokur,Marissa Jaret Winokur,Marissa Jaret Winokur,True,True,0.9999999991999999,46.48978838440962
+6,10,,Cristian de la Fuente,Cristian de la Fuente,False,False,0.9999999985000001,0.8020061301008498
+7,1,Ted McGinley,Rocco DiSpirito,Ted McGinley,False,True,1.0295909485752823,2.919260677962941
+7,2,Kim Kardashian,Kim Kardashian,Kim Kardashian,True,True,0.8832116787541104,0.9896562208329501
+7,3,,Cloris Leachman,Cloris Leachman,False,False,1.0424710423080306,0.5072010198782818
+7,4,Rocco DiSpirito,Rocco DiSpirito,Rocco DiSpirito,True,True,0.9963099629507359,3.1110271574431985
+7,5,Toni Braxton,Toni Braxton,Toni Braxton,True,True,1.2537313429841834,2.6909274375852483
+7,6,Cloris Leachman,Cloris Leachman,Cloris Leachman,True,True,1.0425531912176322,1.2617346768726077
+7,7,Susan Lucci,Susan Lucci,Susan Lucci,True,True,0.9051724135121877,4.036013252104389
+7,8,Maurice Greene,Maurice Greene,Maurice Greene,True,True,1.4705882342128027,16.316274362946906
+7,9,Cody Linley,Cody Linley,Cody Linley,True,True,1.0526315780609417,8.020100406867279
+7,10,,Lance Bass,Lance Bass,False,False,2.9999999865,4.043746469609846
+8,1,,Steve Wozniak,Steve Wozniak,False,False,0.9874791318168264,0.5411614228046374
+8,2,Belinda Carlisle,David Alan Grier,Belinda Carlisle,False,True,1.089318600283566,1.3001940596682677
+8,3,Denise Richards,Denise Richards,Denise Richards,True,True,0.8428290765612145,0.6631269192132533
+8,4,Steve Wozniak,Steve Wozniak,Steve Wozniak,True,True,0.9853420194468842,0.6412081169432207
+8,5,David Alan Grier,David Alan Grier,David Alan Grier,True,True,0.9246575341183266,2.4313235215442894
+8,6,Steve-O,Steve-O,Steve-O,True,True,0.9572649570904133,1.3819649659628426
+8,7,Lawrence Taylor,Lawrence Taylor,Lawrence Taylor,True,True,0.9702970294676011,4.300781448513099
+8,8,Chuck Wicks,Chuck Wicks,Chuck Wicks,True,True,1.0096153842659021,13.555052307819015
+8,9,Lil' Kim,Lil' Kim,Lil' Kim,True,True,0.9259259254972564,7.852313373863208
+8,10,Ty Murray,Ty Murray,Ty Murray,True,True,0.9999999991999999,8.108187537896601
+8,11,,Gilles Marini,Gilles Marini,False,False,0.9999999985000001,6.499307907538099
+9,1,Ashley Hamiliton,Ashley Hamiliton,Ashley Hamiliton,True,True,1.0793650793102545,0.8731656243838585
+9,2,Kathy Ireland,Kathy Ireland,Kathy Ireland,True,True,1.1306354276813617,1.681144122657826
+9,3,Debi Mazar,Debi Mazar,Debi Mazar,True,True,1.0093856654562348,1.1272653779405633
+9,4,Chuck Liddell,Chuck Liddell,Chuck Liddell,True,True,0.9805510533884547,0.9776147833552473
+9,5,Natalie Coughlin,Michael Irvin,Natalie Coughlin,False,True,1.0456273762933297,3.9131773519581485
+9,6,Melissa Joan Hart,Melissa Joan Hart,Melissa Joan Hart,True,True,0.99999999985,1.4312887156589895
+9,7,Mark Dacascos,Mark Dacascos,Mark Dacascos,True,True,0.9702970294676013,7.012877197724806
+9,8,Aaron Carter,Aaron Carter,Aaron Carter,True,True,1.4705882342128027,12.01080323497174
+9,9,Joanna Krupa,Joanna Krupa,Joanna Krupa,True,True,0.9999999991999999,16.212042119772917
+9,10,,Kelly Osbourne,Kelly Osbourne,False,False,0.9999999985000001,0.918125924361589
+10,1,,Aiden Turner,Buzz Aldrin,False,False,1.013400334905677,0.6240878696465109
+10,2,Shannen Doherty,Aiden Turner,Shannen Doherty,False,True,1.0100166943888045,1.1436282322800342
+10,3,Buzz Aldrin,Buzz Aldrin,Buzz Aldrin,True,True,0.9593023254698486,1.106098502560991
+10,4,Aiden Turner,Aiden Turner,Aiden Turner,True,True,0.99999999985,1.51220160055928
+10,5,Kate Gosselin,Kate Gosselin,Kate Gosselin,True,True,1.1089108908548835,0.7403183269821173
+10,6,Jake Pavelka,Jake Pavelka,Jake Pavelka,True,True,0.99999999975,2.700589193880523
+10,7,Pamela Anderson,Niecy Nash,Pamela Anderson,False,True,0.9292035395269792,40.35994480277855
+10,8,Niecy Nash,Niecy Nash,Niecy Nash,True,True,0.9259259254972564,3.9213223772764203
+10,9,Chad Ochocinco,Chad Ochocinco,Chad Ochocinco,True,True,0.7407407403017833,20.31722583143422
+10,10,,Evan Lysacek,Evan Lysacek,False,False,0.9999999985000001,6.787954706890207
+11,1,David Hasselhoff,David Hasselhoff,David Hasselhoff,True,True,1.172131147425692,1.4295403031331642
+11,2,Michael Bolton,Michael Bolton,Michael Bolton,True,True,1.030664395123756,1.3006505125155503
+11,3,Margaret Cho,Margaret Cho,Margaret Cho,True,True,0.896739130337311,2.799519468881643
+11,4,The Situation,The Situation,The Situation,True,True,0.99999999985,0.9743074123478944
+11,5,Florence Henderson,Florence Henderson,Florence Henderson,True,True,0.9572649570904133,3.3295788249955707
+11,6,Audrina Patridge,Kyle Massey,Audrina Patridge,False,True,0.99999999975,3.0890547473543615
+11,7,Rick Fox,Rick Fox,Rick Fox,True,True,0.820312499769287,25.017298357148963
+11,8,Kurt Warner,Kurt Warner,Kurt Warner,True,True,0.7812499996948242,7.075474745983199
+11,9,Brandy,Brandy,Brandy,True,True,0.9999999991999999,25.640152837947973
+11,10,,Kyle Massey,Kyle Massey,False,False,0.9999999985000001,1.748894310059132
+12,1,,Mike Catherwood,Mike Catherwood,False,False,0.9805510533884549,0.8493255976427576
+12,2,Mike Catherwood,Mike Catherwood,Mike Catherwood,True,True,1.0521739129327714,3.4145781196261806
+12,3,Wendy Williams,Wendy Williams,Wendy Williams,True,True,0.9951749094095086,2.002611726987881
+12,4,Sugar Ray Leonard,Sugar Ray Leonard,Sugar Ray Leonard,True,True,0.9342560552323966,4.848585447748847
+12,5,Petra Nemcova,Petra Nemcova,Petra Nemcova,True,True,1.2537313429841834,7.058310204681807
+12,6,Chris Jericho,Chris Jericho,Chris Jericho,True,True,0.8521739128619282,7.717398532015846
+12,7,Kendra Wilkinson,Kendra Wilkinson,Kendra Wilkinson,True,True,1.0396039600254878,27.02132720010444
+12,8,Romeo,Romeo,Romeo,True,True,0.9999999995,10.545606478923693
+12,9,Ralph Macchio,Ralph Macchio,Ralph Macchio,True,True,0.9999999991999999,1.6745457689561252
+12,10,,Chelsea Kane,Kirstie Alley,False,False,0.7499999991562499,0.41663216649914425
+13,1,Metta World Peace (Ron),Metta World Peace (Ron),Metta World Peace (Ron),True,True,0.9913344886523672,1.8762365678750832
+13,2,Elisabetta Canalis,Carson Kressley,Elisabetta Canalis,False,True,0.9633757960855347,5.608370008358933
+13,3,Kristin Cavallari,Carson Kressley,Kristin Cavallari,False,True,0.941780821810299,3.9296102324996895
+13,4,Chynna Phillips,Carson Kressley,Chynna Phillips,False,True,1.194690265272633,3.0250625124125903
+13,5,Carson Kressley,Carson Kressley,Carson Kressley,True,True,0.9230769229146238,3.2388606230950394
+13,6,Chaz Bono,Chaz Bono,Chaz Bono,True,True,0.8521739128619282,1.5840837893133213
+13,7,David Arquette,David Arquette,David Arquette,True,True,0.9999999996571428,15.081151337561446
+13,8,Nancy Grace,Nancy Grace,Nancy Grace,True,True,0.9259259254972564,3.134574925414934
+13,9,Hope Solo,Hope Solo,Hope Solo,True,True,0.9999999991999999,2.114526334579968
+13,10,,J.R. Martinez,J.R. Martinez,False,False,0.9999999985000001,11.651385421711655
+14,1,,Martina Navratilova,Martina Navratilova,False,False,1.1092436973757394,0.8378137836854929
+14,2,Martina Navratilova,Martina Navratilova,Martina Navratilova,True,True,0.927066450495139,2.022593567976002
+14,3,Jack Wagner,Jack Wagner,Jack Wagner,True,True,2.199999999516,7.9458145563716345
+14,4,Sherri Sheperd,Sherri Sheperd,Sherri Sheperd,True,True,1.0456273762933297,4.016855363475604
+14,5,Gavin DeGraw,Gavin DeGraw,Gavin DeGraw,True,True,0.8626198081950923,1.7848648694932243
+14,6,Gladys Knight,Gladys Knight,Gladys Knight,True,True,0.9999999998095238,1.433334424629634
+14,7,Jaleel White,Jaleel White,Jaleel White,True,True,0.9702970294676013,15.743499029992961
+14,8,Roshon Fegan,Roshon Fegan,Roshon Fegan,True,True,1.0096153842659024,40.95804550384295
+14,9,Maria Menounos,Donald Driver,Maria Menounos,False,True,0.9999999991999999,151.86408724662334
+14,10,,Donald Driver,Donald Driver,False,False,2.9999999865,217.52002121450636
+15,1,Pamela Anderson,Pamela Anderson,Pamela Anderson,True,True,0.974464579833326,3.278749586932227
+15,2,Joey Fatone,Joey Fatone,Joey Fatone,True,True,1.0651769086571163,4.44461109381762
+15,3,Helio Castroneves,Drew Lachey,Helio Castroneves,False,True,0.9467918621951785,14.775639929563207
+15,4,Bristol Palin,Bristol Palin,Bristol Palin,True,True,0.8970099666567147,4.431756171973624
+15,5,,Emmitt Smith,Kirstie Alley,False,False,0.7850467288545725,1.272755948368772
+15,6,Sabrina Bryan,Emmitt Smith,Sabrina Bryan,False,True,0.9230769229146238,21.841850573444756
+15,7,,Kirstie Alley,Kirstie Alley,False,False,0.99999999975,0.7766765161319139
+15,8,Gilles Marini,Kirstie Alley,Gilles Marini,False,True,0.9074074072015604,20.509591705965583
+15,9,Apolo Anton Ohno,Emmitt Smith,Apolo Anton Ohno,False,True,0.9999999995,47.66164667401208
+15,10,,Shawn Johnson,Melissa Rycroft,False,False,0.9999999985000001,75.96522964647512
+16,1,,D. L. Hughley,D. L. Hughley,False,False,0.9602686065258653,1.0235554494336037
+16,2,,D. L. Hughley,D. L. Hughley,False,False,1.0293941210868431,0.8318876626127759
+16,3,Wynonna Judd,Wynonna Judd,Wynonna Judd,True,True,0.9587955625071203,1.5479084000944043
+16,4,Lisa Vanderpump,Lisa Vanderpump,Lisa Vanderpump,True,True,1.063144329759904,2.109691460344296
+16,5,D. L. Hughley,D. L. Hughley,D. L. Hughley,True,True,1.2107623316186733,2.0613404472917662
+16,6,Victor Ortiz,Victor Ortiz,Victor Ortiz,True,True,1.0029850744352506,5.140861031091906
+16,7,Andy Dick,Andy Dick,Andy Dick,True,True,0.99999999975,1.2619131962041688
+16,8,Sean Lowe,Sean Lowe,Sean Lowe,True,True,0.9999999996571428,3.8983076504377783
+16,9,Ingo Rademacher,Ingo Rademacher,Ingo Rademacher,True,True,0.7812499996948243,17.674876175174678
+16,10,Alexandra Raisman,Alexandra Raisman,Alexandra Raisman,True,True,0.7407407403017833,80.19642664440795
+17,1,,Keyshawn Johnson,Keyshawn Johnson,False,False,0.9554565700792953,0.24255126214467734
+17,2,Keyshawn Johnson,Keyshawn Johnson,Keyshawn Johnson,True,True,0.8956158663209974,1.8758809267705356
+17,3,Bill Nye,Bill Nye,Bill Nye,True,True,1.0707964600623308,0.8930655739106892
+17,4,Valerie Harper,Valerie Harper,Valerie Harper,True,True,0.8918918917954711,1.9889048632116262
+17,5,Christina Milian,Elizabeth Berkley Lauren,Christina Milian,False,True,0.8794788272455412,8.43238959746897
+17,6,,Bill Engvall,Bill Engvall,False,False,0.9999999998095238,0.377569792481649
+17,7,"Nicole ""Snooki"" Polizzi","Nicole ""Snooki"" Polizzi","Nicole ""Snooki"" Polizzi",True,True,0.8959999998470827,14.793071537880342
+17,8,Brant Daugherty,Brant Daugherty,Brant Daugherty,True,True,0.8376068374314413,7.320847988845732
+17,9,Elizabeth Berkley Lauren,Amber Riley,Elizabeth Berkley Lauren,False,True,1.0096153842659024,6.129223748171187
+17,10,Leah Remini,Leah Remini,Leah Remini,True,True,0.9999999995,4.199282047699083
+17,11,Bill Engvall,Bill Engvall,Bill Engvall,True,True,0.9999999991999999,8.347544274650401
+18,1,,Billy Dee Williams,Billy Dee Williams,False,False,0.9662162161378742,0.5047995934806245
+18,2,Sean Avery,Sean Avery,Sean Avery,True,True,1.06890459352532,2.3623251055884964
+18,3,,Drew Carey,Drew Carey,False,False,0.7692307691420119,0.6973407676801255
+18,4,,Candace Cameron Bure,Candace Cameron Bure,False,False,1.0424710423080306,0.7487478520574459
+18,5,Cody Simpson,Cody Simpson,Cody Simpson,True,True,0.9747292417347417,3.7264133591004263
+18,6,Drew Carey,Drew Carey,Drew Carey,True,True,1.1199999997610666,5.602999157115158
+18,7,NeNe Leakes,NeNe Leakes,NeNe Leakes,True,True,0.99999999975,12.536648815936319
+18,8,Danica McKellar,Danica McKellar,Danica McKellar,True,True,1.6153846144899409,17.785092172098445
+18,9,Charlie White,Candace Cameron Bure,Charlie White,False,True,1.136363635717975,37.028537359677394
+18,10,James Maslow,James Maslow,James Maslow,True,True,0.9999999991999999,17.74877487874445
+19,1,Lolo Jones,Lolo Jones,Lolo Jones,True,True,1.0093856654562348,1.337719187446283
+19,2,Tavis Smiley,Michael Waltrip,Tavis Smiley,False,True,1.3129303747597079,3.4027846605783365
+19,3,Randy Couture,Randy Couture,Randy Couture,True,True,0.9264931086431043,1.9281961288804548
+19,4,Betsey Johnson,Michael Waltrip,Betsey Johnson,False,True,1.0261194028574478,1.3081933343833583
+19,5,,Michael Waltrip,Michael Waltrip,False,False,0.9246575341183266,0.6191878741239342
+19,6,Jonathan Bennett,Antonio Sabato Jr.,Jonathan Bennett,False,True,1.1637931032451136,3.5944766463252034
+19,7,Antonio Sabato Jr.,Antonio Sabato Jr.,Antonio Sabato Jr.,True,True,0.9999999998095238,4.591301668346138
+19,8,Michael Waltrip,Michael Waltrip,Michael Waltrip,True,True,0.99999999975,1.1591998131488128
+19,9,Lea Thompson,Lea Thompson,Lea Thompson,True,True,0.8203124997692871,4.614745978049866
+19,10,Tommy Chong,Tommy Chong,Tommy Chong,True,True,0.9999999995,5.748673404105322
+19,11,Bethany Mota,Bethany Mota,Bethany Mota,True,True,0.9999999991999999,117.4043247988279
+20,1,,Redfoo,Redfoo,False,False,1.2025227749312102,0.5423821562040568
+20,2,Redfoo,Noah Galloway,Redfoo,False,True,0.9517470881103429,2.7450680433486987
+20,3,Charlotte McKinney,Charlotte McKinney,Charlotte McKinney,True,True,1.0033167494847421,1.0790507957257647
+20,4,Michael Sam,Michael Sam,Michael Sam,True,True,1.0299625466878948,2.647619769089604
+20,5,Suzanne Somers,Suzanne Somers,Suzanne Somers,True,True,1.0344827584601666,1.2441523620724697
+20,6,Patti LaBelle,Patti LaBelle,Patti LaBelle,True,True,1.0120481925759908,19.586345610359416
+20,7,Willow Shields,Willow Shields,Willow Shields,True,True,1.306666666239822,4.659713528630486
+20,8,Robert Herjavec,Robert Herjavec,Robert Herjavec,True,True,0.9999999996571428,3.0855902002050524
+20,9,Nastia Liukin,Noah Galloway,Nastia Liukin,False,True,0.7407407403017833,114.59775980109684
+20,10,,Noah Galloway,Noah Galloway,False,False,0.7499999991562499,1.7635157883544104
+21,1,,Kim Zolciak-Biermann,Kim Zolciak-Biermann,False,False,1.0042444821011387,0.48764296095687265
+21,2,Victor Espinoza,Victor Espinoza,Victor Espinoza,True,True,1.0068085105658933,2.0464751416635307
+21,3,,Gary Busey,Paula Deen,False,False,0.8767268861980099,0.23704859853524116
+21,4,Gary Busey,Gary Busey,Gary Busey,True,True,0.8452868851592943,1.148500700902882
+21,5,,Alek Skarlatos,Alek Skarlatos,False,False,1.093117408727647,0.3342857184206328
+21,6,Paula Deen,Paula Deen,Paula Deen,True,True,0.8307692306657042,1.0176456191595444
+21,7,Hayes Grier,Alek Skarlatos,Hayes Grier,False,True,0.9130434781020794,59.50460802808906
+21,8,Andy Grammer,Andy Grammer,Andy Grammer,True,True,0.9702970294676013,4.1591591877879015
+21,9,Alexa PenaVega,Carlos PenaVega,Alexa PenaVega,False,True,0.820312499769287,10.858761891873877
+21,10,,Alek Skarlatos,Alek Skarlatos,False,False,0.7407407403017833,2.4685896623105994
+21,11,Carlos PenaVega,Alek Skarlatos,Carlos PenaVega,False,True,0.7407407403017833,73.50973498032381
+22,1,,Geraldo Rivera,Geraldo Rivera,False,False,0.8187022900200893,0.3481381844201852
+22,2,Geraldo Rivera,Geraldo Rivera,Geraldo Rivera,True,True,0.9517470881103429,1.092260353404115
+22,3,Mischa Barton,Mischa Barton,Mischa Barton,True,True,1.1612284067749437,3.462863112411446
+22,4,Marla Maples,Marla Maples,Marla Maples,True,True,0.9006550217357363,1.809639136588492
+22,5,,Antonio Brown,Antonio Brown,False,False,1.093117408727647,0.5339306135584598
+22,6,Doug Flutie,Doug Flutie,Doug Flutie,True,True,1.2442396311041857,3.711347184027536
+22,7,Kim Fields,Kim Fields,Kim Fields,True,True,1.0632911390251563,33.559774623781536
+22,8,Jodie Sweetin,Wanya Morris,Jodie Sweetin,False,True,0.820312499769287,12.481254020870859
+22,9,Antonio Brown,Antonio Brown,Antonio Brown,True,True,0.9999999995,42.93515875309867
+22,10,,Ginger Zee,Ginger Zee,False,False,0.9999999985000001,1.5505711073142714
+23,1,,Rick Perry,Rick Perry,False,False,0.982558139465925,1.106159334222122
+23,2,Jake T. Austin,Rick Perry,Jake T. Austin,False,True,1.1441005801772954,2.9698296214299056
+23,3,Rick Perry,Rick Perry,Rick Perry,True,True,1.2025227749312097,2.9123366453344133
+23,4,Babyface,Babyface,Babyface,True,True,1.0324232080845364,2.250836081653274
+23,5,,Calvin Johnson Jr.,Calvin Johnson Jr.,False,False,1.7880794697190912,2.9084609887561883
+23,6,Amber Rose,Amber Rose,Amber Rose,True,True,1.0424710423080308,1.7700554753298112
+23,7,Maureen McCormick,Maureen McCormick,Maureen McCormick,True,True,0.9359331474654604,15.130480217177873
+23,8,Ryan Lochte,Ryan Lochte,Ryan Lochte,True,True,0.9702970294676013,1.6897883381436989
+23,9,Marilu Henner,Marilu Henner,Marilu Henner,True,True,1.0396039600254876,21.612673189234574
+23,10,Terra Jole,Calvin Johnson Jr.,Terra Jole,False,True,0.7812499996948242,88.2195896903017
+23,11,Jana Kramer,Jana Kramer,Jana Kramer,True,True,0.9999999991999999,20.309138020226456
+24,1,,Chris Kattan,Chris Kattan,False,False,0.9186295502503838,0.3704505723912782
+24,2,Chris Kattan,Chris Kattan,Chris Kattan,True,True,1.036231883967864,1.9355454360954034
+24,3,Charo,Charo,Charo,True,True,1.2397540982069568,1.3935400951542936
+24,4,Mr. T,Mr. T,Mr. T,True,True,1.084099868451498,3.175499049577887
+24,5,Erika Jayne,Erika Jayne,Erika Jayne,True,True,1.0424710423080308,3.50806135236983
+24,6,Heather Morris,Nick Viall,Heather Morris,False,True,0.9999999998095238,9.66195194070712
+24,7,Nancy Kerrigan,Nancy Kerrigan,Nancy Kerrigan,True,True,0.9074074072015602,3.5215121638134392
+24,8,Bonner Bolton,Bonner Bolton,Bonner Bolton,True,True,0.9999999995,2.892035407853182
+24,9,Simone Biles,Normani,Simone Biles,False,True,0.9999999991999999,22.26451659013424
+24,10,,David Ross,David Ross,False,False,0.9999999985000001,0.02631284278847006
+25,1,,Barbara Corcoran,Barbara Corcoran,False,False,0.9625711960282041,0.6781288952705651
+25,2,Barbara Corcoran,Barbara Corcoran,Barbara Corcoran,True,True,1.005097705960127,3.0154344171627683
+25,3,,Sasha Pieterse,Sasha Pieterse,False,False,1.4864864862655223,0.8694069717962819
+25,4,Derek Fisher,Derek Fisher,Derek Fisher,True,True,1.163461538326174,6.164314009115998
+25,5,Sasha Pieterse,Sasha Pieterse,Sasha Pieterse,True,True,1.0912698411254933,4.368778628024313
+25,6,Nick Lachey,Nick Lachey,Nick Lachey,True,True,1.0424710423080306,1.7320000404268316
+25,7,Nikki Bella,Nikki Bella,Nikki Bella,True,True,0.9230769229146238,6.420350167000103
+25,8,Terrell Owens,Drew Scott,Terrell Owens,False,True,0.9999999996571428,7.371137624755898
+25,9,Victoria Arlen,Drew Scott,Victoria Arlen,False,True,0.9999999995,11.34357278369125
+25,10,Drew Scott,Drew Scott,Drew Scott,True,True,0.7407407403017833,65.86655723455895
+26,1,Jamie Anderson,Jamie Anderson,Jamie Anderson,True,True,0.8814102563160887,5.49066134467952
+26,2,Kareem Abdul-Jabbar,Kareem Abdul-Jabbar,Kareem Abdul-Jabbar,True,True,0.9795918365519128,8.927642800072144
+26,3,Jennie Finch Daigle,Jennie Finch Daigle,Jennie Finch Daigle,True,True,1.0096153842659024,4.895037330717599
+26,4,,Adam Rippon,Josh Norman,False,False,0.9999999985000001,155.44089586847377
+27,1,Nikki Glaser,Nikki Glaser,Nikki Glaser,True,True,0.9833748960240273,2.0910592908160948
+27,2,Danelle Umstead,Danelle Umstead,Danelle Umstead,True,True,0.8399412627895488,1.9556597556959225
+27,3,Nancy McKeon,Joe Amabile,Nancy McKeon,False,True,0.8557284299126287,1.9004135128155133
+27,4,Tinashe,Juan Pablo Di Pace,Tinashe,False,True,0.9364358682251492,1.9573912931603672
+27,5,,Joe Amabile,Joe Amabile,False,False,0.9440559439222578,0.49847469992718885
+27,6,Mary Lou Retton,Mary Lou Retton,Mary Lou Retton,True,True,0.9747292417347418,1.799674457679313
+27,7,John Schneider,John Schneider,John Schneider,True,True,1.1089108908548835,10.146353056098917
+27,8,Juan Pablo Di Pace,Milo Manheim,Juan Pablo Di Pace,False,True,0.9051724135121877,5.187616805426766
+27,9,,Bobby Bones,Bobby Bones,False,False,0.7407407403017833,0.8254892449725805
+28,1,,Lamar Odom,Lamar Odom,False,False,1.049541284311233,0.4584938200630605
+28,2,Mary Wilson,Mary Wilson,Mary Wilson,True,True,0.9602686065258652,1.0526969737733092
+28,3,,Lamar Odom,Lamar Odom,False,False,0.9006550217357363,0.28757328159512235
+28,4,Lamar Odom,Lamar Odom,Lamar Odom,True,True,0.7136678200074682,0.7387605073675183
+28,5,,Karamo Brown,Karamo Brown,False,False,0.9440559439222578,0.8797221728612965
+28,6,Sailor Brinkley-Cook,Sean Spicer,Sailor Brinkley-Cook,False,True,0.8083832334349116,15.269334558397041
+28,7,Karamo Brown,Karamo Brown,Karamo Brown,True,True,0.7384615383576669,4.361120977434107
+28,8,Kate Flannery,Sean Spicer,Kate Flannery,False,True,0.99999999975,1.2014531669879096
+28,9,Sean Spicer,Sean Spicer,Sean Spicer,True,True,0.9999999996571428,0.6897621820212277
+28,10,James Van Der Beek,James Van Der Beek,James Van Der Beek,True,True,1.136363635717975,1.6747730612545846
+28,11,,Kel Mitchell,Kel Mitchell,False,False,0.9999999991999999,13.075146142210793
+29,1,,Charles Oakley,Charles Oakley,False,False,0.9259259258799971,0.41272212133570685
+29,2,Charles Oakley,Charles Oakley,Charles Oakley,True,True,1.1093502376519802,1.5586815401989396
+29,3,Carole Baskin,Carole Baskin,Carole Baskin,True,True,0.9288422280017344,0.5654187164968258
+29,4,Anne Heche,Anne Heche,Anne Heche,True,True,1.160942100001865,2.942627348709247
+29,5,Jesse Metcalfe,Jesse Metcalfe,Jesse Metcalfe,True,True,1.1259842518621117,1.2288855656268618
+29,6,Veron Davis,Veron Davis,Veron Davis,True,True,0.7405140758325568,1.5044278425545958
+29,7,Monica Aldama,Monica Aldama,Monica Aldama,True,True,0.8880516683651183,3.4136311558285217
+29,8,Chrishell Stause,Chrishell Stause,Chrishell Stause,True,True,0.9230769229146238,6.079320947121028
+29,9,AJ McLean,AJ McLean,AJ McLean,True,True,0.8376068374314413,3.4947244412522562
+29,10,Skai Jackson,Skai Jackson,Skai Jackson,True,True,0.9292035395269793,31.67540058107261
+29,11,,Nev Schulman,Nev Schulman,False,False,0.7407407403017833,18.028837979003125
+30,1,,Martin Kove,Martin Kove,False,False,1.0542168674103418,1.3913369763788994
+30,2,Martin Kove,Martin Kove,Martin Kove,True,True,1.0233918128093902,1.6787173437102194
+30,3,Christine Chiu,Christine Chiu,Christine Chiu,True,True,0.9411938533733826,6.9008141172528195
+30,4,Brian Austin Green,Brian Austin Green,Brian Austin Green,True,True,0.9366587489476266,3.3551533510569116
+30,5,Melanie C,Iman Shumpert,Melanie C,False,True,0.9016393441809997,6.014662192874314
+30,6,Kenya Moore,Kenya Moore,Kenya Moore,True,True,0.9951749094095086,6.164148453945864
+30,7,"Mike ""The Miz"" Mizanin","Mike ""The Miz"" Mizanin","Mike ""The Miz"" Mizanin",True,True,1.194690265272633,4.347137417963848
+30,8,Jimmie Allen,Jimmie Allen,Jimmie Allen,True,True,0.7384615383576669,3.062347517807223
+30,9,Melora Hardin,Melora Hardin,Melora Hardin,True,True,1.0096153842659021,16.753035034727596
+30,10,,Cody Rigsby,Cody Rigsby,False,False,0.7407407403017833,51.56374893591799
+31,1,Jason Lewis,Jason Lewis,Jason Lewis,True,True,1.0151147601679662,0.7757063713769705
+31,2,Teresa Giudice,Teresa Giudice,Teresa Giudice,True,True,0.8812421317250778,1.3439481194927008
+31,3,Cheryl Ladd,Cheryl Ladd,Cheryl Ladd,True,True,0.8737997256045912,1.2690447539438514
+31,4,Sam Champion,Sam Champion,Sam Champion,True,True,0.9044342507060972,1.4282201670371724
+31,5,Joseph Baena,Vinny Guadagnino,Joseph Baena,False,True,0.9618834079941081,2.186065780241548
+31,6,Jessie James Decker,Jessie James Decker,Jessie James Decker,True,True,1.1209239128911785,1.5742049393383946
+31,7,Jordin Sparks,Jordin Sparks,Jordin Sparks,True,True,0.8881578946185186,3.185898478385645
+31,8,Heidi D'Amelio,Heidi D'Amelio,Heidi D'Amelio,True,True,0.9230769229146238,1.3661110929280247
+31,9,Trevor Donovan,Trevor Donovan,Trevor Donovan,True,True,0.83999999975808,0.8495704864456196
+31,10,,Shangela,Shangela,False,False,1.24999999875,1.2139012335224149
+32,1,Matt Walsh,Matt Walsh,Matt Walsh,True,True,1.1210841252306467,0.5504701665743598
+32,2,Jamie Lynn Spears,Mauricio Umansky,Jamie Lynn Spears,False,True,1.0506216695481552,0.6779298850723479
+32,3,Tyson Beckford,Tyson Beckford,Tyson Beckford,True,True,0.927066450495139,0.6965757612957832
+32,4,Adrian Peterson,Adrian Peterson,Adrian Peterson,True,True,1.114180478697223,1.798852024505482
+32,5,Mira Sorvino,Mira Sorvino,Mira Sorvino,True,True,0.9207589284686652,0.8581530351002621
+32,6,Mauricio Umansky,Mauricio Umansky,Mauricio Umansky,True,True,0.99999999985,1.6045477760876088
+32,7,Lele Pons,Lele Pons,Lele Pons,True,True,0.8842105261668698,15.19655012452618
+32,8,Barry Williams,Harry Jowsey,Barry Williams,False,True,0.99999999975,0.9891420066712431
+32,9,Harry Jowsey,Harry Jowsey,Harry Jowsey,True,True,0.9999999996571428,0.779559803777357
+32,10,,Alyson Hannigan,Alyson Hannigan,False,False,0.9999999995,0.7950102161156218
+32,11,,Alyson Hannigan,Alyson Hannigan,False,False,0.8928571424585457,1.1344430954893838
+33,1,,Reginald VelJohnson,Reginald VelJohnson,False,False,1.0278019113059522,0.4601045631905285
+33,2,Tori Spelling,Reginald VelJohnson,Tori Spelling,False,True,0.9426294820082453,1.3455121033024418
+33,3,Eric Roberts,Eric Roberts,Eric Roberts,True,True,0.9853420194468842,0.8417754127590432
+33,4,Brooks Nader,Dwight Howard ,Brooks Nader,False,True,1.3775510201235162,7.180716715199395
+33,5,Phaedra Parks,Phaedra Parks,Phaedra Parks,True,True,1.4545454541424636,12.129967626274086
+33,6,Jenn Tran,Jenn Tran,Jenn Tran,True,True,0.9423076920857063,4.645547552115514
+33,7,Dwight Howard ,Dwight Howard ,Dwight Howard ,True,True,0.9999999996571428,2.5723902642854735
+33,8,,Stephen Nedoroscik,Stephen Nedoroscik,False,False,0.7812499996948242,2.6780673702741966
+33,9,,Joey Graziadei,Joey Graziadei,False,False,0.9259259254972564,3.5833896880488827
+34,1,,Corey Feldman,Corey Feldman,False,False,1.1653860226021167,0.5259078978385577
+34,2,Corey Feldman,Corey Feldman,Corey Feldman,True,True,0.7915009939972331,1.4270459503648212
+34,3,Lauren Jauregui,Lauren Jauregui,Lauren Jauregui,True,True,0.9867740079688926,2.2634349447362103
+34,4,Hilaria Baldwin,Hilaria Baldwin,Hilaria Baldwin,True,True,0.9279141103433454,5.662520367087345
+34,5,,Andy Richter,Andy Richter,False,False,1.0364321606738152,0.9229633516865183
+34,6,Scott Hoying,Scott Hoying,Scott Hoying,True,True,0.877659574374717,1.4213566178496855
+34,7,Jen Affleck,Andy Richter,Jen Affleck,False,True,0.9854014597083622,1.6404476720421133
+34,8,Danielle Fishel,Danielle Fishel,Danielle Fishel,True,True,1.0029850744352506,6.648701143944811
+34,9,Andy Richter,Andy Richter,Andy Richter,True,True,0.7050359710987525,1.3898812246356151
+34,10,Whitney Leavitt,Whitney Leavitt,Whitney Leavitt,True,True,1.0396039600254876,98.03745388060756
+34,11,,Elaine Hendrix,Elaine Hendrix,False,False,0.9259259254972564,38.283163952253595
