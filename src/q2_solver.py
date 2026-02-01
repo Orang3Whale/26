@@ -13,6 +13,7 @@ DATA_ESTIMATION = config.RESULTS_DATA / 'votes_estimation_CI.csv' # 任务1产�
 DATA_WEEKLY = config.DATA_PROCESSED / 'weekly_data_with_popularity.csv' # 包含评委分(weekly_total)
 DATA_VIEWERS = config.DATA_RAW / 'viewers.csv' # 收视人数文件
 OUTPUT_PATH = config.RESULTS_DATA
+DATA_SEASONAL = config.DATA_PROCESSED / 'seasonal_data_with_popularity.csv' # 包含赛季最终名次(final_place)
 
 # ==========================================
 # 1. 辅助功能：生成收视数据
@@ -55,13 +56,20 @@ def solve_task_2():
     df_votes = pd.read_csv(DATA_ESTIMATION)
     df_weekly = pd.read_csv(DATA_WEEKLY)
     df_viewers = pd.read_csv(DATA_VIEWERS)
+    # 读取赛季最终名次（用于作为真实的当前赛制最终排名）
+    if os.path.exists(DATA_SEASONAL):
+        df_seasonal = pd.read_csv(DATA_SEASONAL)
+        df_seasonal.columns = [c.strip() for c in df_seasonal.columns]
+    else:
+        df_seasonal = pd.DataFrame(columns=['season', 'celebrity_name', 'final_place'])
     
     # 清理列名空格
     df_weekly.columns = [c.strip() for c in df_weekly.columns]
     
     # 数据合并
     # 我们需要从 df_weekly 中获取评委分 (weekly_total)
-    df_full = pd.merge(df_votes, df_weekly[['season', 'week', 'celebrity_name', 'weekly_total']], 
+    # 包含 weekly_rank 以便使用表中真实名次作为当前赛制的参考
+    df_full = pd.merge(df_votes, df_weekly[['season', 'week', 'celebrity_name', 'weekly_total','weekly_rank']], 
                        on=['season', 'week', 'celebrity_name'], how='inner')
     
     # 合并收视数据 (用于计算估计票数)
@@ -72,10 +80,17 @@ def solve_task_2():
     df_full['estimated_vote_count'] = df_full['vote_mean'] * df_full['viewers'] * 1_000_000
 
     results = []
+    # 存放逐人排名的数据
+    person_rows = []
+    # 赛季层面的聚合，用于计算对立赛制下的赛季最终排名
+    # key: (season, celebrity_name) -> {'sum_judge':..., 'sum_est_votes':..., 'weeks':...}
+    season_agg = {}
     
     # 遍历每一周进行模拟
     for (season, week), group in df_full.groupby(['season', 'week']):
         if len(group) < 2: continue # 至少2人才能比较
+        # 保证索引整齐，便于按位置取值
+        group = group.reset_index(drop=True)
         
         # 提取关键向量
         names = group['celebrity_name'].values
@@ -154,8 +169,140 @@ def solve_task_2():
             'rank_correct': (rank_elim_name == actual_name),
             'pct_correct': (pct_elim_name == actual_name)
         })
+        # ----------------------------------------
+        # 逐人排名：计算在两套规则下的最终名次，并标注当前赛季采用的赛制
+        # 确定当前赛制: S1-S2 and S28+ 为 Rank System; 其余为 Percentage System
+        current_system = 'Percent'
+        if season <= 2 or season >= 28:
+            current_system = 'Rank'
+
+        # 在排名制下：根据 rank_sum 排序，值越小表示表现越好 -> final_rank_rank: 1 最好
+        final_rank_rank = rankdata(rank_sum, method='min')
+
+        # 在百分比制下：pct_sum 值越大表示越好 -> final_rank_pct: 1 最好
+        final_rank_pct = rankdata(-pct_sum, method='min')
+
+        # 将逐人结果加入列表
+        for i, name in enumerate(names):
+            # 优先使用表中真实的 weekly_rank 作为该赛季 "当前赛制" 的名次（如果存在）
+            weekly_rank_val = None
+            if 'weekly_rank' in group.columns:
+                v = group['weekly_rank'].values[i]
+                if not pd.isna(v):
+                    try:
+                        weekly_rank_val = int(v)
+                    except Exception:
+                        weekly_rank_val = None
+
+            # 对立赛制的排名始终使用我们计算得到的值
+            opposing_rank_val = int(final_rank_pct[i]) if current_system == 'Rank' else int(final_rank_rank[i])
+            opp_system = 'Percent' if current_system == 'Rank' else 'Rank'
+
+            # 当前赛制名次: 若表中存在真实 weekly_rank 则直接采用，否则回退到计算值
+            if weekly_rank_val is not None:
+                cur_rank = weekly_rank_val
+            else:
+                cur_rank = int(final_rank_rank[i]) if current_system == 'Rank' else int(final_rank_pct[i])
+
+            person_rows.append({
+                'season': season,
+                'week': week,
+                'celebrity_name': name,
+                'judge_score': float(j_scores[i]),
+                'fan_vote_mean': float(v_means[i]),
+                'rank_based_rank': int(final_rank_rank[i]),
+                'pct_based_rank': int(final_rank_pct[i]),
+                'current_system': current_system,
+                'current_system_rank': cur_rank,
+                'opposing_system': opp_system,
+                'opposing_system_rank': opposing_rank_val,
+            })
+            # 更新赛季聚合
+            key = (season, name)
+            if key not in season_agg:
+                season_agg[key] = {'sum_judge': 0.0, 'sum_est_votes': 0.0, 'weeks': 0}
+            season_agg[key]['sum_judge'] += float(j_scores[i])
+            # 使用估计票数作为观众票聚合量
+            season_agg[key]['sum_est_votes'] += float(group['estimated_vote_count'].values[i])
+            season_agg[key]['weeks'] += 1
         
     df_res = pd.DataFrame(results)
+    df_person = pd.DataFrame(person_rows)
+
+    # 生成赛季层面的逐人最终排名对比（每赛季每人一条）
+    final_rows = []
+    # 先把赛季内的选手按season分组
+    seasons = set(k[0] for k in season_agg.keys())
+    for s in sorted(seasons):
+        # 收集该赛季的选手和聚合数据
+        keys = [k for k in season_agg.keys() if k[0] == s]
+        names_s = [k[1] for k in keys]
+        sum_judges = np.array([season_agg[(s, n)]['sum_judge'] for n in names_s], dtype=float)
+        sum_fans = np.array([season_agg[(s, n)]['sum_est_votes'] for n in names_s], dtype=float)
+
+        # Rank-system season-level: judge rank (by sum_judges) and fan rank (by sum_fans)
+        r_judge_season = rankdata(-sum_judges, method='min')
+        r_fan_season = rankdata(-sum_fans, method='min')
+        season_rank_sum = r_judge_season + r_fan_season
+        final_rank_by_rank_system = rankdata(season_rank_sum, method='min')
+
+        # Percentage-system season-level: compute percentages and sum
+        total_j = np.sum(sum_judges)
+        total_f = np.sum(sum_fans)
+        p_judge_season = sum_judges / total_j if total_j > 0 else np.zeros_like(sum_judges)
+        p_fan_season = sum_fans / total_f if total_f > 0 else np.zeros_like(sum_fans)
+        pct_sum_season = p_judge_season + p_fan_season
+        final_rank_by_pct_system = rankdata(-pct_sum_season, method='min')
+
+        # 当前赛制判断（与逐周相同规则）
+        current_system = 'Percent'
+        if s <= 2 or s >= 28:
+            current_system = 'Rank'
+
+        # 取季赛真实 final_place 作为当前赛制真实名次（若存在）
+        seasonal_map = {}
+        if not df_seasonal.empty:
+            sub = df_seasonal[df_seasonal['season'] == s]
+            for _, row in sub.iterrows():
+                fp = None
+                # 优先使用 final_placement（文件中的列名），兼容 final_place
+                if 'final_placement' in row and not pd.isna(row['final_placement']):
+                    try:
+                        fp = int(row['final_placement'])
+                    except Exception:
+                        fp = None
+                elif 'final_place' in row and not pd.isna(row['final_place']):
+                    try:
+                        fp = int(row['final_place'])
+                    except Exception:
+                        fp = None
+
+                seasonal_map[row['celebrity_name']] = fp
+
+        for idx, name in enumerate(names_s):
+            # 真实当前赛制名次：优先使用 seasonal.final_place
+            real_final = seasonal_map.get(name, None)
+            if real_final is None:
+                # 回退到我们计算的值
+                real_final = int(final_rank_by_rank_system[idx]) if current_system == 'Rank' else int(final_rank_by_pct_system[idx])
+
+            # 对立赛制名次：使用我们计算的赛季级排名
+            opposing_final = int(final_rank_by_pct_system[idx]) if current_system == 'Rank' else int(final_rank_by_rank_system[idx])
+
+            final_rows.append({
+                'season': s,
+                'celebrity_name': name,
+                'sum_judge_score': float(sum_judges[idx]),
+                'sum_estimated_votes': float(sum_fans[idx]),
+                'weeks_count': season_agg[(s, name)]['weeks'],
+                'current_system': current_system,
+                'current_system_final_place': real_final,
+                'opposing_system_final_place': opposing_final,
+                'final_rank_if_rank_system': int(final_rank_by_rank_system[idx]),
+                'final_rank_if_pct_system': int(final_rank_by_pct_system[idx]),
+            })
+
+    df_person_final = pd.DataFrame(final_rows)
     
     # ==========================================
     # 3. 输出分析报告
@@ -208,6 +355,21 @@ def solve_task_2():
     # 保存详细结果
     save_result(df_res,'task2_analysis_results.csv')
     print("\n详细数据已保存至: task2_analysis_results.csv")
+    # 保存逐周逐人排名信息（历史周级记录）
+    save_result(df_person, 'task2_person_weekly_rankings.csv')
+    print("逐周逐人数据已保存至: task2_person_weekly_rankings.csv")
+    # 保存赛季层面的逐人最终排名对比（每赛季每人一条）
+    save_result(df_person_final, 'task2_person_rankings.csv')
+    print("赛季层面逐人最终排名已保存至: task2_person_rankings.csv")
+
+def contrast():
+    """
+    本函数用于实现对比新老机制下的最终排名结果
+    """
+    season_data = pd.read_csv('data\processed\seasonal_data_with_popularity.csv')#
+    week_data = pd.read_csv('data\processed\weekly_data_with_popularity.csv')
+    vote_data = pd.read_csv('results\data\forward_votes_estimation_optimized.csv')
+    
 
 if __name__ == "__main__":
     solve_task_2()

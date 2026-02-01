@@ -257,8 +257,8 @@ def popularity_merge():
 
 if __name__=="__main__":
     # weekly_stat_process()
-    # stat_unique(RAW_file,"results")
+    stat_unique(RAW_file,"celebrity_homecountry/region")
     # seasonal_process()
     # process_select("week")
     # stat_unique(RAW_file,"ballroom_partner")
-    popularity_merge()
+    # popularity_merge()

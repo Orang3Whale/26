@@ -444,7 +444,382 @@ def plot_task2(data_path):
     print("所有图表绘制完成。")
 #---------------------------------------------任务二绘图结束-------------------------------------------------
 
+def plot_rank_diff():
+    """绘制不同机制下的排名变化"""
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    
+    # 文件路径
+    file = 'data/results/integrated_seasonal_data_with_hypothetical_ranks.csv'
+    
+    # 检查文件是否存在
+    try:
+        df = pd.read_csv(file)
+        print(f"数据加载成功，形状: {df.shape}")
+        print(f"可用列名: {list(df.columns)}")
+    except FileNotFoundError:
+        print(f"数据文件不存在: {file}")
+        print("请先运行生成假设排名数据的代码")
+        return
+    
+    # 设置绘图风格
+    sns.set_theme(style="whitegrid", context="talk")
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 支持中文显示
+    plt.rcParams['axes.unicode_minus'] = False    # 正常显示负号
+    
+    # 检查必要的列是否存在
+    required_columns = ['actual_rank', 'hypothetical_rank_1', 'hypothetical_rank_2']
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    
+    if missing_columns:
+        print(f"警告: 数据文件中缺少以下列: {missing_columns}")
+        print("将使用示例数据进行演示")
+        # 创建示例数据用于演示
+        df = create_sample_rank_data()
+    
+    # 图表1: 排名变化散点图
+    plt.figure(figsize=(12, 10))
+    
+    # 子图1: 实际排名 vs 假设排名1
+    plt.subplot(2, 2, 1)
+    sns.scatterplot(data=df, x='actual_rank', y='hypothetical_rank_1', alpha=0.7)
+    plt.plot([df['actual_rank'].min(), df['actual_rank'].max()], 
+             [df['actual_rank'].min(), df['actual_rank'].max()], 'r--', alpha=0.8)
+    plt.xlabel('实际排名')
+    plt.ylabel('假设排名 (机制1)')
+    plt.title('实际排名 vs 假设排名1')
+    
+    # 子图2: 实际排名 vs 假设排名2
+    plt.subplot(2, 2, 2)
+    sns.scatterplot(data=df, x='actual_rank', y='hypothetical_rank_2', alpha=0.7)
+    plt.plot([df['actual_rank'].min(), df['actual_rank'].max()], 
+             [df['actual_rank'].min(), df['actual_rank'].max()], 'r--', alpha=0.8)
+    plt.xlabel('实际排名')
+    plt.ylabel('假设排名 (机制2)')
+    plt.title('实际排名 vs 假设排名2')
+    
+    # 子图3: 排名差异分布
+    plt.subplot(2, 2, 3)
+    df['rank_diff_1'] = df['hypothetical_rank_1'] - df['actual_rank']
+    df['rank_diff_2'] = df['hypothetical_rank_2'] - df['actual_rank']
+    
+    plt.hist(df['rank_diff_1'], alpha=0.7, label='机制1差异', bins=20)
+    plt.hist(df['rank_diff_2'], alpha=0.7, label='机制2差异', bins=20)
+    plt.xlabel('排名变化 (假设排名 - 实际排名)')
+    plt.ylabel('频次')
+    plt.title('排名变化分布')
+    plt.legend()
+    
+    # 子图4: 排名变化箱线图
+    plt.subplot(2, 2, 4)
+    diff_data = pd.DataFrame({
+        '差异值': pd.concat([df['rank_diff_1'], df['rank_diff_2']]),
+        '机制': ['机制1'] * len(df) + ['机制2'] * len(df)
+    })
+    sns.boxplot(data=diff_data, x='机制', y='差异值')
+    plt.title('排名变化箱线图')
+    plt.ylabel('排名变化')
+    
+    plt.tight_layout()
+    plt.savefig('output/rank_comparison_scatter.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    # 图表2: 排名变化热力图
+    plt.figure(figsize=(10, 8))
+    
+    # 创建排名变化矩阵
+    rank_changes = pd.crosstab(df['actual_rank'], df['hypothetical_rank_1'])
+    sns.heatmap(rank_changes, annot=True, fmt='d', cmap='YlOrRd')
+    plt.title('实际排名到假设排名1的变化热力图')
+    plt.xlabel('假设排名1')
+    plt.ylabel('实际排名')
+    plt.tight_layout()
+    plt.savefig('output/rank_change_heatmap.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    # 图表3: 排名稳定性分析
+    plt.figure(figsize=(12, 6))
+    
+    # 计算每个选手的排名变化绝对值
+    df['abs_diff_1'] = abs(df['rank_diff_1'])
+    df['abs_diff_2'] = abs(df['rank_diff_2'])
+    
+    stability_data = pd.DataFrame({
+        '变化幅度': pd.concat([df['abs_diff_1'], df['abs_diff_2']]),
+        '机制': ['机制1'] * len(df) + ['机制2'] * len(df),
+        '实际排名': pd.concat([df['actual_rank'], df['actual_rank']])
+    })
+    
+    sns.boxplot(data=stability_data, x='实际排名', y='变化幅度', hue='机制')
+    plt.title('不同实际排名下的排名变化稳定性')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig('output/rank_stability_analysis.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    # 输出统计信息
+    print("\n排名变化统计分析:")
+    print(f"机制1平均变化: {df['rank_diff_1'].mean():.2f} ± {df['rank_diff_1'].std():.2f}")
+    print(f"机制2平均变化: {df['rank_diff_2'].mean():.2f} ± {df['rank_diff_2'].std():.2f}")
+    print(f"机制1最大提升: {df['rank_diff_1'].min():.0f} 名")
+    print(f"机制1最大下降: {df['rank_diff_1'].max():.0f} 名")
+    print(f"机制2最大提升: {df['rank_diff_2'].min():.0f} 名")
+    print(f"机制2最大下降: {df['rank_diff_2'].max():.0f} 名")
+    
+    print("\n图表生成完成！")
+
+def create_sample_rank_data():
+    """创建示例排名数据用于演示"""
+    import numpy as np
+    np.random.seed(42)
+    
+    n_samples = 100
+    actual_ranks = np.random.randint(1, 11, n_samples)
+    
+    # 创建有偏的假设排名
+    hypothetical_1 = actual_ranks + np.random.normal(0, 1.5, n_samples)
+    hypothetical_2 = actual_ranks + np.random.normal(0.5, 2, n_samples)
+    
+    # 确保排名在合理范围内
+    hypothetical_1 = np.clip(np.round(hypothetical_1), 1, 10)
+    hypothetical_2 = np.clip(np.round(hypothetical_2), 1, 10)
+    
+    df = pd.DataFrame({
+        'celebrity_name': [f'选手_{i}' for i in range(n_samples)],
+        'season': np.random.randint(1, 6, n_samples),
+        'actual_rank': actual_ranks,
+        'hypothetical_rank_1': hypothetical_1,
+        'hypothetical_rank_2': hypothetical_2
+    })
+    
+    return df
+
+def plot_ranking_comparison(file_path):
+    # 1. 读取数据
+    try:
+        df = pd.read_csv(file_path)
+        print(f"成功读取数据，共 {len(df)} 行。")
+    except FileNotFoundError:
+        print(f"错误：找不到文件 {file_path}")
+        return
+
+    # 2. 设置绘图风格 (学术论文风格)
+    sns.set_theme(style="whitegrid", context="paper", font_scale=1.2)
+    plt.rcParams['font.family'] = 'Times New Roman'
+    
+    # 创建 2x2 的画布
+    fig, axes = plt.subplots(2, 2, figsize=(16, 14))
+    fig.suptitle('Comparison of Ranking Mechanisms: Actual vs Hypothetical', fontsize=20, fontweight='bold', y=0.98)
+
+    # ---------------------------------------------------------
+    # 图表 1: 实际名次 vs 假设名次 (散点图)
+    # ---------------------------------------------------------
+    sns.scatterplot(
+        data=df,
+        x='final_placement',
+        y='hypothetical_rank',
+        hue='system_type',      # 不同颜色代表不同原始赛制
+        style='system_type',    # 不同形状区分
+        s=100,                  # 点的大小
+        alpha=0.7,              # 透明度
+        ax=axes[0, 0],
+        palette='deep'
+    )
+    
+    # 添加对角线 (名次不变线)
+    max_rank = max(df['final_placement'].max(), df['hypothetical_rank'].max())
+    axes[0, 0].plot([0, max_rank], [0, max_rank], 'r--', linewidth=2, label='No Change Line')
+    
+    axes[0, 0].set_title('Actual Placement vs. Hypothetical Rank', fontsize=16)
+    axes[0, 0].set_xlabel('Actual Placement (Lower is Better)', fontsize=14)
+    axes[0, 0].set_ylabel('Hypothetical Rank (Lower is Better)', fontsize=14)
+    axes[0, 0].legend(title='Original System')
+    axes[0, 0].text(1, max_rank-2, "Points Below Line = Improved in Hypothetical\nPoints Above Line = Worsened in Hypothetical", 
+                    fontsize=10, bbox=dict(facecolor='white', alpha=0.8))
+
+    # ---------------------------------------------------------
+    # 图表 2: 名次差异分布 (直方图)
+    # ---------------------------------------------------------
+    # 计算差异: 正值代表假设名次更好 (例如实际10 - 假设5 = +5)
+    # 注意：这里我们用 rank_difference 列，假设 csv 里已经是 (实际 - 假设)
+    # 如果 CSV 里 rank_difference 是负数代表变差，请根据实际数据调整解释
+    
+    sns.histplot(
+        data=df,
+        x='rank_difference',
+        hue='system_type',
+        kde=True,               # 显示密度曲线
+        bins=20,
+        ax=axes[0, 1],
+        palette='deep',
+        edgecolor='white'
+    )
+    axes[0, 1].axvline(0, color='r', linestyle='--', linewidth=2)
+    axes[0, 1].set_title('Distribution of Rank Impact', fontsize=16)
+    axes[0, 1].set_xlabel('Rank Difference (Actual - Hypothetical)\nPositive = Hypothetical System is Better for Contestant', fontsize=14)
+    axes[0, 1].set_ylabel('Number of Contestants', fontsize=14)
+
+    # ---------------------------------------------------------
+    # 图表 3: 假设赛制下的最大受益者 Top 10 (条形图)
+    # ---------------------------------------------------------
+    # 筛选出差异最大的正值 (受益最大)
+    top_improved = df.nlargest(10, 'rank_difference')
+    
+    sns.barplot(
+        data=top_improved,
+        x='rank_difference',
+        y='celebrity_name',
+        hue='system_type',
+        dodge=False,
+        ax=axes[1, 0],
+        palette='viridis'       # 绿色系代表受益
+    )
+    axes[1, 0].set_title('Top 10 Beneficiaries of Hypothetical System', fontsize=16)
+    axes[1, 0].set_xlabel('Positions Gained (Rank Improvement)', fontsize=14)
+    axes[1, 0].set_ylabel('')
+    axes[1, 0].legend(title='Original System')
+
+    # ---------------------------------------------------------
+    # 图表 4: 假设赛制下的最大受害者 Top 10 (条形图)
+    # ---------------------------------------------------------
+    # 筛选出差异最小的负值 (受损最大)
+    top_worsened = df.nsmallest(10, 'rank_difference')
+    # 为了绘图好看，取绝对值显示长度，但保留负号逻辑
+    top_worsened['abs_diff'] = top_worsened['rank_difference'].abs()
+    
+    sns.barplot(
+        data=top_worsened,
+        x='rank_difference',    # 这里显示负值
+        y='celebrity_name',
+        hue='system_type',
+        dodge=False,
+        ax=axes[1, 1],
+        palette='magma'         # 红色系代表受损
+    )
+    axes[1, 1].set_title('Top 10 "Victims" of Hypothetical System', fontsize=16)
+    axes[1, 1].set_xlabel('Positions Lost (Rank Decline)', fontsize=14)
+    axes[1, 1].set_ylabel('')
+    axes[1, 1].axvline(0, color='black', linewidth=1)
+    axes[1, 1].legend(title='Original System')
+
+    # 3. 调整布局并保存
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # 留出标题空间
+    output_filename = config.RESULTS_FIG / 'ranking_comparison_analysis.png'
+    plt.savefig(output_filename, dpi=300)
+    print(f"图表已生成并保存为: {output_filename}")
+    # plt.show() # 如果在本地运行，可以取消注释查看窗口
+
+def correlations():
+    # 1. 读取数据
+    df_raw = pd.read_csv(config.DATA_RAW / '2026_MCM_Problem_C_Data.csv')
+    df_partner = pd.read_csv(config.DATA_PROCESSED / 'q3_partner_characteristics.csv')
+    df_ind = pd.read_csv(config.DATA_PROCESSED / 'industry.csv')
+    df_reg = pd.read_csv(config.DATA_PROCESSED / 'region.csv')
+
+    # 2. 数据重命名与预处理
+    # 为了清晰，将统计表中的 avg_placement 重命名，表明它是该行业/地区的平均表现
+    df_partner = df_partner.rename(columns={
+        'appearance_count': 'partner_appearance_count',
+        'avg_placement': 'partner_avg_placement',
+        'avg_judge_score': 'partner_avg_judge_score',
+        'avg_elim_week': 'partner_avg_elim_week',
+        'champion_count': 'partner_champion_count'
+    })
+    df_ind = df_ind.rename(columns={'avg_placement': 'industry_avg_placement', 'industry': 'celebrity_industry'})
+    df_reg = df_reg.rename(columns={'avg_placement': 'region_avg_placement', 'region': 'celebrity_homestate'})
+
+    # 3. 数据合并 (以"对/Couple"为单位)
+    # 将舞伴特征、明星行业特征、明星地区特征合并到原始比赛数据中
+    df_merged = pd.merge(df_raw, df_partner, left_on='ballroom_partner', right_on='partner_name', how='left')
+    df_merged = pd.merge(df_merged, df_ind[['celebrity_industry', 'industry_avg_placement']], on='celebrity_industry', how='left')
+    df_merged = pd.merge(df_merged, df_reg[['celebrity_homestate', 'region_avg_placement']], on='celebrity_homestate', how='left')
+
+    # 4. 选择要计算相关性的变量
+    cols_to_corr = [
+        'partner_appearance_count',
+        'partner_avg_placement',
+        'partner_avg_judge_score',
+        'partner_avg_elim_week',
+        'partner_champion_count',
+        'industry_avg_placement', # 代表该明星所属行业的平均水平
+        'region_avg_placement',    # 代表该明星所属地区的平均水平
+        'celebrity_age_during_season' # New Feature
+    ]
+
+    # 5. 计算斯皮尔曼相关系数 (Spearman Correlation)
+    # 使用 Spearman 是因为排名等数据属于序数数据，非正态分布
+    corr_matrix = df_merged[cols_to_corr].corr(method='spearman')
+
+    # 6. 绘制热度图
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+    plt.grid(False)
+    plt.title('Spearman Correlation Heatmap: Partner & Celebrity Characteristics')
+    # 设置横轴标签倾斜45度，避免重叠
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    plt.tight_layout()
+    plt.savefig(config.RESULTS_FIG / 'correlation_heatmap.png')
+    log("相关性图已生成")
+
+def plot_rank_difference_distribution(file_path):
+    try:
+        df = pd.read_csv(file_path)
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+        return
+
+    # 按照排名差异排序，以形成瀑布流/S形曲线效果，美观且易读
+    df_sorted = df.sort_values('rank_difference').reset_index(drop=True)
+    
+    # 创建索引用于X轴绘图
+    df_sorted['contestant_index'] = df_sorted.index
+
+    # 设置画布
+    plt.figure(figsize=(14, 8))
+    sns.set_theme(style="whitegrid")
+
+    # 绘制散点图
+    # X轴: 排序后的选手索引
+    # Y轴: 排名差异
+    sns.scatterplot(
+        data=df_sorted,
+        x='contestant_index',
+        y='rank_difference',
+        hue='system_type',
+        style='system_type',
+        palette='coolwarm', # 冷暖色调适合表现正负差异
+        s=60,
+        alpha=0.8,
+        edgecolor='k' 
+    )
+
+    # 添加0基准线
+    plt.axhline(0, color='black', linestyle='--', linewidth=1.5, label='No Change')
+
+    # 添加解释性文字
+    max_diff = df['rank_difference'].max()
+    min_diff = df['rank_difference'].min()
+    
+    plt.text(10, max_diff - 0.5, "Positive: Better Rank in Hypothetical System", 
+             bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'), verticalalignment='top')
+    plt.text(10, min_diff + 0.5, "Negative: Worse Rank in Hypothetical System", 
+             bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'), verticalalignment='bottom')
+
+    # 标题和标签
+    plt.title('Distribution of Rank Differences for All 421 Contestants', fontsize=16)
+    plt.xlabel('Contestants (Sorted by Rank Difference)', fontsize=12)
+    plt.ylabel('Rank Difference (Actual - Hypothetical)', fontsize=12)
+    plt.legend(title='Original System Type')
+
+    plt.tight_layout()
+    plt.savefig(config.RESULTS_FIG / 'rank_difference_waterfall.png')
+    print("Plot saved to rank_difference_waterfall.png")
 if __name__ == "__main__":
     # task1()
     # plot_voting_results(TASK_1_FILE)
-    plot_task2(TASK2_DATA)
+    # plot_task2(TASK2_DATA)
+    # plot_ranking_comparison(r'D:\NUAA\2026\MCM\26\results\data\integrated_seasonal_data_with_hypothetical_ranks.csv')
+    correlations()
+    # plot_rank_difference_distribution(config.RESULTS_DATA / 'integrated_seasonal_data_with_hypothetical_ranks.csv')
