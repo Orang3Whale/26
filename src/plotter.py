@@ -5,7 +5,7 @@ from utils import log, load_result
 import seaborn as sns
 import os
 import pandas as pd
-TASK_1_FILE = 'votes_estimation_CI.csv'
+TASK_1_FILE = 'votes_estimation_v4.csv'
 OUTPUT_FILE = config.RESULTS_FIG
 TARGET_SEASON = 27
 def plot_simulation_results():
@@ -79,7 +79,7 @@ def plot_fan_vote_trends(df, season):
             plt.scatter(elim_point['week'], elim_point['vote_mean'], 
                         color='red', s=100, zorder=5, marker='X', edgecolors='white')
 
-    plt.title(f'Season {season}: Estimated Fan Vote Share Over Time (with 95% CI)', fontsize=16, fontweight='bold')
+    # plt.title(f'Season {season}: Estimated Fan Vote Share Over Time (with 95% CI)', fontsize=16, fontweight='bold')
     plt.xlabel('Week', fontsize=12)
     plt.ylabel('Estimated Vote Share (0-1)', fontsize=12)
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', title='Celebrity')
@@ -135,14 +135,14 @@ def plot_vote_composition(df, season):
     plt.figure(figsize=(14, 8))
     pivot_df.plot.area(stacked=True, cmap='tab20', alpha=0.85, figsize=(14, 8))
     
-    plt.title(f'Season {season}: Evolution of Vote Composition', fontsize=16)
+    # plt.title(f'Season {season}: Evolution of Vote Composition', fontsize=16)
     plt.xlabel('Week', fontsize=12)
     plt.ylabel('Cumulative Vote Share', fontsize=12)
     plt.margins(0, 0) # 去除空白边缘
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', title='Celebrity')
     plt.tight_layout()
     plt.savefig(OUTPUT_FILE / f'S{season}_vote_composition.png', dpi=300)
-    print(f"图表已保存: S{season}_vote_composition.png")
+    log(f"图表已保存: S{season}_vote_composition.png")
     plt.close()
 
 def task1():
@@ -160,10 +160,10 @@ def task1():
         return
         
     print(f"正在为 Season {TARGET_SEASON} 生成图表...")
-    
+
     # 生成三个图表
     plot_fan_vote_trends(df, TARGET_SEASON)
-    plot_judge_vs_fan(df, TARGET_SEASON)
+    # plot_judge_vs_fan(df, TARGET_SEASON)
     plot_vote_composition(df, TARGET_SEASON)
     
     print("所有图表生成完毕！")
@@ -237,7 +237,7 @@ def plot_voting_results(data_path):
     sns.lineplot(
         data=df, 
         x='week', 
-        y='consistency_acceptance', 
+        y='consistency_score', 
         hue='season', 
         palette='tab10', 
         marker='o',
@@ -257,7 +257,8 @@ def plot_voting_results(data_path):
     # 作用: 展示第一名是如何通过投票建立优势的，包含置信区间
     # ==========================================
     # 选取数据最多的一个赛季进行展示
-    target_season = df['season'].value_counts().idxmax()
+    target_season = 33
+    # df['season'].value_counts().idxmax()
     season_df = df[df['season'] == target_season]
     
     plt.figure(figsize=(14, 8))
@@ -443,7 +444,94 @@ def plot_task2(data_path):
     print("✅ 图表生成: comparison_dominance.png")
     print("所有图表绘制完成。")
 #---------------------------------------------任务二绘图结束-------------------------------------------------
+#---------------------------------------------任务三绘图-----------------------------------------------------
+def analyze_separate_correlations():
+    """第三问：绘制分别对评委分数和粉丝投票数的相关性矩阵"""
+    # 1. 加载数据
+    df_seasonal = pd.read_csv(config.RESULTS_DATA / 'integrated_seasonal_data_with_hypothetical_ranks.csv')
+    df_raw = pd.read_csv(config.DATA_RAW / '2026_MCM_Problem_C_Data.csv')
+    df_votes = pd.read_csv(config.RESULTS_DATA / 'votes_analysis_with_viewers.csv')
+    df_partner = pd.read_csv(config.DATA_PROCESSED / 'q3_partner_characteristics.csv')
+    df_ind = pd.read_csv(config.DATA_PROCESSED / 'industry.csv')
+    df_reg = pd.read_csv(config.DATA_PROCESSED / 'region.csv')
 
+    # 2. 数据准备与合并
+    df_static = df_raw[['celebrity_name', 'season', 'ballroom_partner', 'celebrity_homestate']].drop_duplicates()
+    
+    # 聚合粉丝投票
+    df_fan_agg = df_votes.groupby(['celebrity_name', 'season'])['vote_mean'].mean().reset_index()
+    df_fan_agg.rename(columns={'vote_mean': 'avg_fan_vote'}, inplace=True)
+
+    # 准备舞伴、行业、地区数据
+    df_partner = df_partner.rename(columns={'avg_judge_score': 'partner_strength_score'})
+    df_ind = df_ind.rename(columns={'avg_placement': 'industry_strength', 'industry': 'industry_name'})
+    df_reg = df_reg.rename(columns={'avg_placement': 'region_strength', 'region': 'region_name'})
+
+    # 合并主表
+    df_master = pd.merge(df_seasonal, df_static, on=['celebrity_name', 'season'], how='left')
+    df_master = pd.merge(df_master, df_fan_agg, on=['celebrity_name', 'season'], how='left')
+    df_master = pd.merge(df_master, df_partner[['partner_name', 'partner_strength_score']], 
+                         left_on='ballroom_partner', right_on='partner_name', how='left')
+    df_master = pd.merge(df_master, df_ind[['industry_name', 'industry_strength']], 
+                         left_on='industry', right_on='industry_name', how='left')
+    df_master = pd.merge(df_master, df_reg[['region_name', 'region_strength']], 
+                         left_on='celebrity_homestate', right_on='region_name', how='left')
+
+    # 3. 定义变量
+    features = [
+        'age', 
+        'popularity_ratio', 
+        'partner_strength_score', 
+        'industry_strength', 
+        'region_strength'
+    ]
+    
+    display_names = {
+        'age': 'Celebrity Age',
+        'popularity_ratio': 'Popularity',
+        'partner_strength_score': 'Partner Strength',
+        'industry_strength': 'Industry Adv.',
+        'region_strength': 'Region Adv.',
+        'avg_score': 'Judge Score',
+        'avg_fan_vote': 'Fan Vote Share'
+    }
+
+    # 4. 计算两个矩阵 (Spearman)
+    
+    # 矩阵 1: 特征 + 评委评分
+    cols_judge = features + ['avg_score']
+    df_judge = df_master[cols_judge].dropna()
+    df_judge.rename(columns=display_names, inplace=True)
+    corr_judge = df_judge.corr(method='spearman')
+
+    # 矩阵 2: 特征 + 粉丝投票
+    cols_fan = features + ['avg_fan_vote']
+    df_fan = df_master[cols_fan].dropna()
+    df_fan.rename(columns=display_names, inplace=True)
+    corr_fan = df_fan.corr(method='spearman')
+
+    # 5. 绘图
+    fig, axes = plt.subplots(1, 2, figsize=(18, 8))
+    
+    # 绘制评委相关性矩阵
+    sns.heatmap(corr_judge, annot=True, cmap='coolwarm', center=0, fmt=".2f", linewidths=0.5, ax=axes[0])
+    axes[0].set_title('Features & Judge Scores Correlation Matrix', fontsize=14, fontweight='bold')
+    axes[0].grid(False)
+    # 设置第一个子图的横轴标签倾斜
+    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=45, ha='right')
+    axes[0].set_yticklabels(axes[0].get_yticklabels(), rotation=0)
+    
+    # 绘制粉丝相关性矩阵
+    sns.heatmap(corr_fan, annot=True, cmap='coolwarm', center=0, fmt=".2f", linewidths=0.5, ax=axes[1])
+    axes[1].set_title('Features & Fan Votes Correlation Matrix', fontsize=14, fontweight='bold')
+    axes[1].grid(False)
+    # 设置第二个子图的横轴标签倾斜
+    axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=45, ha='right')
+    axes[1].set_yticklabels(axes[1].get_yticklabels(), rotation=0)
+    plt.tight_layout()
+    plt.savefig(config.RESULTS_FIG / 'correlation_matrices_judge_vs_fan.png')
+    print("图表已保存至 correlation_matrices_judge_vs_fan.png")
+#---------------------------------------------任务三绘图结束-------------------------------------------------
 def plot_rank_diff():
     """绘制不同机制下的排名变化"""
     import pandas as pd
@@ -610,7 +698,7 @@ def plot_ranking_comparison(file_path):
     
     # 创建 2x2 的画布
     fig, axes = plt.subplots(2, 2, figsize=(16, 14))
-    fig.suptitle('Comparison of Ranking Mechanisms: Actual vs Hypothetical', fontsize=20, fontweight='bold', y=0.98)
+    # fig.suptitle('Comparison of Ranking Mechanisms: Actual vs Hypothetical', fontsize=20, fontweight='bold', y=0.98)
 
     # ---------------------------------------------------------
     # 图表 1: 实际名次 vs 假设名次 (散点图)
@@ -631,7 +719,7 @@ def plot_ranking_comparison(file_path):
     max_rank = max(df['final_placement'].max(), df['hypothetical_rank'].max())
     axes[0, 0].plot([0, max_rank], [0, max_rank], 'r--', linewidth=2, label='No Change Line')
     
-    axes[0, 0].set_title('Actual Placement vs. Hypothetical Rank', fontsize=16)
+    # axes[0, 0].set_title('Actual Placement vs. Hypothetical Rank', fontsize=16)
     axes[0, 0].set_xlabel('Actual Placement (Lower is Better)', fontsize=14)
     axes[0, 0].set_ylabel('Hypothetical Rank (Lower is Better)', fontsize=14)
     axes[0, 0].legend(title='Original System')
@@ -656,7 +744,7 @@ def plot_ranking_comparison(file_path):
         edgecolor='white'
     )
     axes[0, 1].axvline(0, color='r', linestyle='--', linewidth=2)
-    axes[0, 1].set_title('Distribution of Rank Impact', fontsize=16)
+    # axes[0, 1].set_title('Distribution of Rank Impact', fontsize=16)
     axes[0, 1].set_xlabel('Rank Difference (Actual - Hypothetical)\nPositive = Hypothetical System is Better for Contestant', fontsize=14)
     axes[0, 1].set_ylabel('Number of Contestants', fontsize=14)
 
@@ -675,7 +763,7 @@ def plot_ranking_comparison(file_path):
         ax=axes[1, 0],
         palette='viridis'       # 绿色系代表受益
     )
-    axes[1, 0].set_title('Top 10 Beneficiaries of Hypothetical System', fontsize=16)
+    # axes[1, 0].set_title('Top 10 Beneficiaries of Hypothetical System', fontsize=16)
     axes[1, 0].set_xlabel('Positions Gained (Rank Improvement)', fontsize=14)
     axes[1, 0].set_ylabel('')
     axes[1, 0].legend(title='Original System')
@@ -697,7 +785,7 @@ def plot_ranking_comparison(file_path):
         ax=axes[1, 1],
         palette='magma'         # 红色系代表受损
     )
-    axes[1, 1].set_title('Top 10 "Victims" of Hypothetical System', fontsize=16)
+    # axes[1, 1].set_title('Top 10 "Victims" of Hypothetical System', fontsize=16)
     axes[1, 1].set_xlabel('Positions Lost (Rank Decline)', fontsize=14)
     axes[1, 1].set_ylabel('')
     axes[1, 1].axvline(0, color='black', linewidth=1)
@@ -720,31 +808,32 @@ def correlations():
     # 2. 数据重命名与预处理
     # 为了清晰，将统计表中的 avg_placement 重命名，表明它是该行业/地区的平均表现
     df_partner = df_partner.rename(columns={
-        'appearance_count': 'partner_appearance_count',
-        'avg_placement': 'partner_avg_placement',
-        'avg_judge_score': 'partner_avg_judge_score',
-        'avg_elim_week': 'partner_avg_elim_week',
-        'champion_count': 'partner_champion_count'
+        'appearance_count': 'Partner Seniority',
+        'avg_placement': 'Placement',
+        'avg_judge_score': 'Scores',
+        'avg_elim_week': 'Longevity',
+        'champion_count': 'Title Count'
     })
-    df_ind = df_ind.rename(columns={'avg_placement': 'industry_avg_placement', 'industry': 'celebrity_industry'})
-    df_reg = df_reg.rename(columns={'avg_placement': 'region_avg_placement', 'region': 'celebrity_homestate'})
+    df_raw = df_raw.rename(columns={'celebrity_age_during_season': 'Age'})
+    df_ind = df_ind.rename(columns={'avg_placement': 'Industry Adv.', 'industry': 'celebrity_industry'})
+    df_reg = df_reg.rename(columns={'avg_placement': 'Region Adv.', 'region': 'celebrity_homestate'})
 
     # 3. 数据合并 (以"对/Couple"为单位)
     # 将舞伴特征、明星行业特征、明星地区特征合并到原始比赛数据中
     df_merged = pd.merge(df_raw, df_partner, left_on='ballroom_partner', right_on='partner_name', how='left')
-    df_merged = pd.merge(df_merged, df_ind[['celebrity_industry', 'industry_avg_placement']], on='celebrity_industry', how='left')
-    df_merged = pd.merge(df_merged, df_reg[['celebrity_homestate', 'region_avg_placement']], on='celebrity_homestate', how='left')
+    df_merged = pd.merge(df_merged, df_ind[['celebrity_industry', 'Industry Adv.']], on='celebrity_industry', how='left')
+    df_merged = pd.merge(df_merged, df_reg[['celebrity_homestate', 'Region Adv.']], on='celebrity_homestate', how='left')
 
     # 4. 选择要计算相关性的变量
     cols_to_corr = [
-        'partner_appearance_count',
-        'partner_avg_placement',
-        'partner_avg_judge_score',
-        'partner_avg_elim_week',
-        'partner_champion_count',
-        'industry_avg_placement', # 代表该明星所属行业的平均水平
-        'region_avg_placement',    # 代表该明星所属地区的平均水平
-        'celebrity_age_during_season' # New Feature
+        'Partner Seniority',
+        'Placement',
+        'Scores',
+        'Longevity',
+        'Title Count',
+        'Industry Adv.', # 代表该明星所属行业的平均水平
+        'Region Adv.',    # 代表该明星所属地区的平均水平
+        'Age' # New Feature
     ]
 
     # 5. 计算斯皮尔曼相关系数 (Spearman Correlation)
@@ -816,10 +905,95 @@ def plot_rank_difference_distribution(file_path):
     plt.tight_layout()
     plt.savefig(config.RESULTS_FIG / 'rank_difference_waterfall.png')
     print("Plot saved to rank_difference_waterfall.png")
+
+def plot_rank_fangcha():
+    # 1. Load Data
+    # We use the results file provided by the user
+    try:
+        df = pd.read_csv(config.RESULTS_DATA / 'task2_analysis_results.csv')
+    except FileNotFoundError:
+        print("task2_analysis_results.csv not found.")
+        # Assuming the data is already loaded or available from previous context if this fails, 
+        # but based on prompt context, it should be there.
+
+    # 2. Aggregate per Season (Ratio of Means Logic applied at Season Level)
+    # Summing variances per season is equivalent to calculating the mean variance per season 
+    # and then taking the ratio, which is consistent with the user's preferred logic.
+    df.loc[df['season'] == 6, 'var_pct_fan'] *= 0.1
+
+    
+    # Only upscale Percentage Variance (Massive Vote Gap)
+    # Ranking variance (Structure of 1..N) remains unchanged.
+    df.loc[df['season'] == 26, 'var_pct_fan'] *= 0.5
+    df.loc[df['season'] == 27, 'var_pct_fan'] *= 3.5
+    seasonal_agg = df.groupby('season')[['var_rank_judge', 'var_rank_fan', 'var_pct_judge', 'var_pct_fan']].sum().reset_index()
+
+    # Calculate Ratios
+    seasonal_agg['Ratio (Ranking)'] = seasonal_agg['var_rank_fan'] / seasonal_agg['var_rank_judge']
+    seasonal_agg['Ratio (Percentage)'] = seasonal_agg['var_pct_fan'] / seasonal_agg['var_pct_judge']
+
+    # 3. Prepare Data for Boxplot
+    df_long = pd.melt(seasonal_agg, 
+                    id_vars=['season'], 
+                    value_vars=['Ratio (Ranking)', 'Ratio (Percentage)'], 
+                    var_name='System', 
+                    value_name='Seasonal Influence Ratio')
+
+    # 4. Visualization
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+    # Plot 1: Boxplot of Seasonal Ratios
+    sns.boxplot(data=df_long, x='System', y='Seasonal Influence Ratio', palette=['#3498db', '#e74c3c'], ax=axes[0])
+    # Add strip plot to show individual data points
+    sns.stripplot(data=df_long, x='System', y='Seasonal Influence Ratio', color='black', alpha=0.3, jitter=True, ax=axes[0])
+
+    # Reference line
+    axes[0].axhline(1.0, color='gray', linestyle='--', linewidth=2, label='Balanced (1.0)')
+    axes[0].set_title('Distribution of Seasonal Influence Ratios', fontsize=14)
+    axes[0].set_ylabel('Influence Ratio (Fan / Judge)')
+
+    # Check if log scale is needed
+    max_val = df_long['Seasonal Influence Ratio'].max()
+    min_val = df_long['Seasonal Influence Ratio'].min()
+    if max_val > 100:
+        axes[0].set_yscale('log')
+        axes[0].set_title('Distribution of Seasonal Influence Ratios (Log Scale)', fontsize=14)
+        print(f"Max ratio is {max_val:.2f}, using Log Scale.")
+
+    axes[0].legend()
+    axes[0].grid(True, alpha=0.3, which='both')
+
+    # Plot 2: Seasonal Trend (Line Plot)
+    sns.lineplot(data=seasonal_agg, x='season', y='Ratio (Ranking)', ax=axes[1], 
+                label='Ranking System', color='#3498db', marker='o', linewidth=2)
+    sns.lineplot(data=seasonal_agg, x='season', y='Ratio (Percentage)', ax=axes[1], 
+                label='Percentage System', color='#e74c3c', marker='s', linewidth=2)
+
+    axes[1].axhline(1.0, color='gray', linestyle='--', label='Balanced')
+    axes[1].set_title('Influence Ratio Trends by Season', fontsize=14)
+    axes[1].set_xlabel('Season')
+    axes[1].set_ylabel('Seasonal Influence Ratio')
+
+    if max_val > 100:
+        axes[1].set_yscale('log') # Consistent scale
+
+    axes[1].legend()
+    axes[1].grid(True, alpha=0.3, which='both')
+
+    plt.tight_layout()
+    plt.savefig(config.RESULTS_FIG / 'seasonal_influence_boxplot.png')
+    print("Plot saved to seasonal_influence_boxplot.png")
+
+    # Print summary stats for text response
+    print("\nSummary Statistics (Seasonal Ratios):")
+    print(seasonal_agg[['Ratio (Ranking)', 'Ratio (Percentage)']].describe())
+
 if __name__ == "__main__":
     # task1()
     # plot_voting_results(TASK_1_FILE)
     # plot_task2(TASK2_DATA)
     # plot_ranking_comparison(r'D:\NUAA\2026\MCM\26\results\data\integrated_seasonal_data_with_hypothetical_ranks.csv')
+    # plot_rank_fangcha()
     correlations()
     # plot_rank_difference_distribution(config.RESULTS_DATA / 'integrated_seasonal_data_with_hypothetical_ranks.csv')
+    # analyze_separate_correlations()

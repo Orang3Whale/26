@@ -362,14 +362,6 @@ def solve_task_2():
     save_result(df_person_final, 'task2_person_rankings.csv')
     print("赛季层面逐人最终排名已保存至: task2_person_rankings.csv")
 
-def contrast():
-    """
-    本函数用于实现对比新老机制下的最终排名结果
-    """
-    season_data = pd.read_csv('data\processed\seasonal_data_with_popularity.csv')#
-    week_data = pd.read_csv('data\processed\weekly_data_with_popularity.csv')
-    vote_data = pd.read_csv('results\data\forward_votes_estimation_optimized.csv')
-    
 
 if __name__ == "__main__":
     solve_task_2()
